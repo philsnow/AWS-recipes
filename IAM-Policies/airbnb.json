@@ -1,0 +1,60 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1432356759000",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUser",
+                "iam:EnableMFADevice",
+                "iam:DeactivateMFADevice"
+            ],
+            "Resource": [
+                "arn:aws:iam::172631448019:user/${aws:username}"
+            ]
+        },
+        {
+            "Sid": "Stmt1432356759001",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateVirtualMFADevice",
+                "iam:DeleteVirtualMFADevice"
+            ],
+            "Resource": [
+                "arn:aws:iam::172631448019:mfa/${aws:username}"
+            ]
+        },
+        {
+            "Effect": "Deny",
+            "NotAction": [
+                "iam:GetUser",
+                "iam:EnableMFADevice",
+                "iam:DeactivateMFADevice",
+                "iam:CreateVirtualMFADevice",
+                "iam:DeleteVirtualMFADevice"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "NumericGreaterThan": {
+                    "aws:MultiFactorAuthAge": "3600"
+                }
+            }
+        },
+        {
+            "Effect": "Deny",
+            "NotAction": [
+                "iam:GetUser",
+                "iam:EnableMFADevice",
+                "iam:DeactivateMFADevice",
+                "iam:CreateVirtualMFADevice",
+                "iam:DeleteVirtualMFADevice"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "Null": {
+                    "aws:MultiFactorAuthAge": "true"
+                }
+            }
+        }
+    ]
+}
